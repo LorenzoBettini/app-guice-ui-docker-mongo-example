@@ -46,8 +46,17 @@ public class StudentSwingView extends JFrame implements StudentView {
 		return listStudentsModel;
 	}
 
+	public SchoolController getSchoolController() {
+		return schoolController;
+	}
+
 	public void setSchoolController(SchoolController schoolController) {
 		this.schoolController = schoolController;
+	}
+
+	public void start() {
+		setVisible(true);
+		getSchoolController().allStudents();
 	}
 
 	/**

@@ -47,6 +47,14 @@ public class StudentSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.show(); // shows the frame to test
 	}
 
+	@Test
+	public void testStart() {
+		GuiActionRunner.execute(
+			() -> studentSwingView.start()
+		);
+		verify(schoolController).allStudents();
+	}
+
 	@Test @GUITest
 	public void testControlsInitialStates() {
 		window.label(JLabelMatcher.withText("id"));
