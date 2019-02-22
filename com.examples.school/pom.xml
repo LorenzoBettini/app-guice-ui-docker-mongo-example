@@ -20,6 +20,7 @@
     <testcontainers.version>1.10.5</testcontainers.version>
     <picocli.version>3.9.3</picocli.version>
     <cucumber.version>4.2.2</cucumber.version>
+    <guice.version>4.2.2</guice.version>
   </properties>
 
   <dependencies>
@@ -38,6 +39,16 @@
       <groupId>info.picocli</groupId>
       <artifactId>picocli</artifactId>
       <version>${picocli.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <version>${guice.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.inject.extensions</groupId>
+      <artifactId>guice-assistedinject</artifactId>
+      <version>${guice.version}</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
