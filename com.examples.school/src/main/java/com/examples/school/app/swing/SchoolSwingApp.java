@@ -3,11 +3,9 @@ package com.examples.school.app.swing;
 import java.awt.EventQueue;
 import java.util.concurrent.Callable;
 
-import com.examples.school.controller.SchoolController;
-import com.examples.school.repository.mongo.StudentMongoRepository;
+import com.examples.school.guice.SchoolSwingMongoDefaultModule;
 import com.examples.school.view.swing.StudentSwingView;
-import com.mongodb.MongoClient;
-import com.mongodb.ServerAddress;
+import com.google.inject.Guice;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -36,12 +34,14 @@ public class SchoolSwingApp implements Callable<Void> {
 	public Void call() throws Exception {
 		EventQueue.invokeLater(() -> {
 			try {
-				StudentMongoRepository studentRepository = new StudentMongoRepository(
-						new MongoClient(new ServerAddress(mongoHost, mongoPort)), databaseName, collectionName);
-				StudentSwingView studentView = new StudentSwingView();
-				SchoolController schoolController = new SchoolController(studentView, studentRepository);
-				studentView.setSchoolController(schoolController);
-				studentView.start();
+				Guice.createInjector(
+						new SchoolSwingMongoDefaultModule()
+							.mongoHost(mongoHost)
+							.mongoPort(mongoPort)
+							.databaseName(databaseName)
+							.collectionName(collectionName))
+				.getInstance(StudentSwingView.class)
+				.start();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
