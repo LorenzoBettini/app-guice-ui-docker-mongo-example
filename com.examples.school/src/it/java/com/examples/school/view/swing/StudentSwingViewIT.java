@@ -16,8 +16,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.examples.school.controller.SchoolController;
+import com.examples.school.guice.SchoolSwingMongoDefaultModule;
 import com.examples.school.model.Student;
 import com.examples.school.repository.mongo.StudentMongoRepository;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+import com.google.inject.util.Modules;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 
@@ -29,15 +36,19 @@ public class StudentSwingViewIT extends AssertJSwingJUnitTestCase {
 	private static MongoServer server;
 	private static InetSocketAddress serverAddress;
 
+	@Inject
 	private MongoClient mongoClient;
 
-	private FrameFixture window;
+	@Inject
 	private StudentSwingView studentSwingView;
-	private SchoolController schoolController;
+
+	@Inject
 	private StudentMongoRepository studentRepository;
 
-	private static final String SCHOOL_DB_NAME = "school";
-	private static final String STUDENT_COLLECTION_NAME = "student";
+	// this will be retrieved from the view
+	private SchoolController schoolController;
+
+	private FrameFixture window;
 
 	@BeforeClass
 	public static void setupServer() {
@@ -53,17 +64,24 @@ public class StudentSwingViewIT extends AssertJSwingJUnitTestCase {
 
 	@Override
 	protected void onSetUp() {
-		mongoClient = new MongoClient(new ServerAddress(serverAddress));
-		studentRepository =
-			new StudentMongoRepository(mongoClient, SCHOOL_DB_NAME, STUDENT_COLLECTION_NAME);
-		// explicit empty the database through the repository
-		for (Student student : studentRepository.findAll()) {
-			studentRepository.delete(student.getId());
-		}
+		final Module moduleForTesting =
+			Modules
+				.override(new SchoolSwingMongoDefaultModule())
+				.with(new AbstractModule() {
+					@Override
+					public void configure() {
+						bind(MongoClient.class)
+							.toInstance(new MongoClient(new ServerAddress(serverAddress)));
+					}
+				});
+		final Injector injector = Guice.createInjector(moduleForTesting);
 		GuiActionRunner.execute(() -> {
-			studentSwingView = new StudentSwingView();
-			schoolController = new SchoolController(studentSwingView, studentRepository);
-			studentSwingView.setSchoolController(schoolController);
+			injector.injectMembers(this);
+			// explicit empty the database through the repository
+			for (Student student : studentRepository.findAll()) {
+				studentRepository.delete(student.getId());
+			}
+			schoolController = studentSwingView.getSchoolController();
 			return studentSwingView;
 		});
 		window = new FrameFixture(robot(), studentSwingView);
