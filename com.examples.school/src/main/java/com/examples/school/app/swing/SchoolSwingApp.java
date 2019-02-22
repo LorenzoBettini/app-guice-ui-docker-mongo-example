@@ -41,8 +41,7 @@ public class SchoolSwingApp implements Callable<Void> {
 				StudentSwingView studentView = new StudentSwingView();
 				SchoolController schoolController = new SchoolController(studentView, studentRepository);
 				studentView.setSchoolController(schoolController);
-				studentView.setVisible(true);
-				schoolController.allStudents();
+				studentView.start();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
