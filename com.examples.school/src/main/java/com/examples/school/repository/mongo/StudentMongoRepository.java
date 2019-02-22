@@ -6,8 +6,11 @@ import java.util.stream.StreamSupport;
 
 import org.bson.Document;
 
+import com.examples.school.guice.MongoCollectionName;
+import com.examples.school.guice.MongoDbName;
 import com.examples.school.model.Student;
 import com.examples.school.repository.StudentRepository;
+import com.google.inject.Inject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
@@ -16,7 +19,10 @@ public class StudentMongoRepository implements StudentRepository {
 
 	private MongoCollection<Document> studentCollection;
 
-	public StudentMongoRepository(MongoClient client, String databaseName, String collectionName) {
+	@Inject
+	public StudentMongoRepository(MongoClient client,
+			@MongoDbName String databaseName,
+			@MongoCollectionName String collectionName) {
 		studentCollection = client
 			.getDatabase(databaseName)
 			.getCollection(collectionName);
