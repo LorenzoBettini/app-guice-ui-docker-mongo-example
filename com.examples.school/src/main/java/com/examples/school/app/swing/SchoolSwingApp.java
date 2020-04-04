@@ -27,7 +27,7 @@ public class SchoolSwingApp implements Callable<Void> {
 	private String collectionName = "student";
 
 	public static void main(String[] args) {
-		CommandLine.call(new SchoolSwingApp(), args);
+		new CommandLine(new SchoolSwingApp()).execute(args);
 	}
 
 	@Override
