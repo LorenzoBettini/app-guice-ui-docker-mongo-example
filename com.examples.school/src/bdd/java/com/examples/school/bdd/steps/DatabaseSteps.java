@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.bson.Document;
 
+import com.examples.school.bdd.SchoolSwingAppBDD;
 import com.mongodb.MongoClient;
 import com.mongodb.client.model.Filters;
 
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
-import cucumber.api.java.en.Given;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.en.Given;
 
 public class DatabaseSteps {
 
@@ -25,7 +26,7 @@ public class DatabaseSteps {
 
 	@Before
 	public void setUp() {
-		mongoClient = new MongoClient();
+		mongoClient = new MongoClient("localhost", SchoolSwingAppBDD.mongoPort);
 		// always start with an empty database
 		mongoClient.getDatabase(DB_NAME).drop();
 	}

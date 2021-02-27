@@ -17,10 +17,12 @@ import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.FrameFixture;
 
-import cucumber.api.java.After;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import com.examples.school.bdd.SchoolSwingAppBDD;
+
+import io.cucumber.java.After;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 public class StudentSwingViewSteps {
 
@@ -37,6 +39,7 @@ public class StudentSwingViewSteps {
 		// start the Swing application
 		application("com.examples.school.app.swing.SchoolSwingApp")
 			.withArgs(
+				"--mongo-port=" + SchoolSwingAppBDD.mongoPort,
 				"--db-name=" + DB_NAME,
 				"--db-collection=" + COLLECTION_NAME
 			)
@@ -76,9 +79,9 @@ public class StudentSwingViewSteps {
 	}
 
 	@Then("An error is shown containing the following values")
-	public void an_error_is_shown_containing_the_following_values(List<String> values) {
+	public void an_error_is_shown_containing_the_following_values(List<List<String>> values) {
 		assertThat(window.label("errorMessageLabel").text())
-			.contains(values);
+			.contains(values.get(0));
 	}
 
 	@Given("The user provides student data in the text fields")
