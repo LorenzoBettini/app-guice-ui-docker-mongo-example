@@ -1,5 +1,5 @@
 # app-guice-ui-docker-mongo-example
-A simple example of a Maven project built on Travis CI with DI (Guice), UI, E2E and BDD Tests with AssertJ Swing, Cucumber, and MongoDB
+A simple example of a Maven project built on GitHub Actions (on Linux, macOS and Windows) with DI (Guice), UI, E2E and BDD Tests with AssertJ Swing, Cucumber, and MongoDB
 
 An example of Chapter _Learning tests_ of the book
 
